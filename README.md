@@ -20,10 +20,15 @@ visibility; the calibration loader and test-only buffer peer grant access only
 to their existing product consumers. Internal users in the same Bazel package
 retain access without a public visibility grant.
 
-`hardware.build` supplies shared build and installation rules, not runtime
-hardware services. All installation consumers share its `InstallInfo` provider.
+Transform no longer depends directly on `hardware.build`.
+Packaging uses standard `rules_pkg` providers directly.
 The product assembles the plugin, mainboard, runtime libraries and configuration
 into one relocatable source/runtime archive layout.
+
+Product directory installation and archives use official `rules_pkg` targets.
+Module SDK mappings also use `pkg_files`/`pkg_filegroup` with an explicit
+`install_dir`; the legacy install API and lint macros have been removed.
+C++ lint is performed explicitly during review, outside the compilation graph.
 
 These boundaries use native [Bzlmod dependencies](https://bazel.build/external/module),
 [target visibility](https://bazel.build/concepts/visibility) and

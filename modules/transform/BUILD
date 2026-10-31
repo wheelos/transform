@@ -1,6 +1,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
-load("//tools:cpplint.bzl", "cpplint")
-load("//tools/install:install.bzl", "install")
+load("@rules_pkg//pkg:install.bzl", "pkg_install")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files", "strip_prefix")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -253,25 +253,52 @@ cc_binary(
     deps = [":static_transform_component_lib"],
 )
 
-install(
-    name = "install",
-    data = [
-        ":runtime_data",
-    ],
-    data_dest = "transform",
-    library_dest = "transform/lib",
-    targets = [
-        ":libstatic_transform_component.so",
+pkg_files(
+    name = "package_files_data",
+    srcs = [":runtime_data"],
+    attributes = pkg_attributes(mode = "0644"),
+    prefix = "transform",
+    strip_prefix = strip_prefix.from_root("modules/transform"),
+)
+
+pkg_files(
+    name = "package_files_libraries",
+    srcs = [":libstatic_transform_component.so"],
+    attributes = pkg_attributes(mode = "0755"),
+    prefix = "transform/lib",
+    strip_prefix = strip_prefix.from_root("modules/transform"),
+)
+
+pkg_files(
+    name = "package_files_archives",
+    srcs = [
         ":buffer",
         ":ground_reference",
         ":timed_transform_resolver",
-        ":transform_query",
         ":transform_broadcaster",
         ":transform_diagnostics",
+        ":transform_query",
+    ],
+    attributes = pkg_attributes(mode = "0644"),
+    prefix = "lib",
+    strip_prefix = strip_prefix.from_root("modules/transform"),
+)
+
+pkg_filegroup(
+    name = "package_files",
+    srcs = [
+        ":package_files_archives",
+        ":package_files_data",
+        ":package_files_libraries",
     ],
     visibility = ["//visibility:public"],
-    deps = [
-    ],
+)
+
+pkg_install(
+    name = "install_dir",
+    srcs = [":package_files"],
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
 )
 
 filegroup(
@@ -283,18 +310,25 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-install(
-    name = "install_src",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":install_transform_hdrs",
-        ":install_transform_src",
+pkg_filegroup(
+    name = "source_files",
+    srcs = [
+        ":package_transform_hdrs",
+        ":package_transform_src",
     ],
+    visibility = ["//visibility:public"],
 )
 
-install(
-    name = "install_transform_src",
-    data = glob([
+pkg_install(
+    name = "source_dir",
+    srcs = [":source_files"],
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+)
+
+pkg_files(
+    name = "package_transform_src_data",
+    srcs = glob([
         "**/*.cc",
         "**/*.h",
         "BUILD",
@@ -302,13 +336,25 @@ install(
         "dag/*.dag",
         "launch/*.launch",
     ]),
-    data_dest = "transform/src",
+    attributes = pkg_attributes(mode = "0644"),
+    prefix = "transform/src",
+    strip_prefix = strip_prefix.from_pkg(),
 )
 
-install(
-    name = "install_transform_hdrs",
-    data = PUBLIC_HDRS,
-    data_dest = "transform/include",
+pkg_filegroup(
+    name = "package_transform_src",
+    srcs = [":package_transform_src_data"],
 )
 
-cpplint()
+pkg_files(
+    name = "package_transform_hdrs_data",
+    srcs = PUBLIC_HDRS,
+    attributes = pkg_attributes(mode = "0644"),
+    prefix = "transform/include",
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
+pkg_filegroup(
+    name = "package_transform_hdrs",
+    srcs = [":package_transform_hdrs_data"],
+)
