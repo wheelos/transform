@@ -193,6 +193,7 @@ cc_library(
         "@@//modules/tools/vehicle_calibration:__pkg__",
         "@@wheelos_hmi+//modules/dreamview/backend/point_cloud:__pkg__",
         "@@wheelos_perception+//modules/perception/onboard/transform_wrapper:__pkg__",
+        "@@wheelos_tool_kit+//modules/tools/vehicle_calibration:__pkg__",
     ],
     deps = [
         "@com_github_jbeder_yaml_cpp//:yaml-cpp",
