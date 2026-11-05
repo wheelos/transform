@@ -1,8 +1,20 @@
+load("@core//runtime:runtime.bzl", "runtime_module")
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("@rules_pkg//pkg:install.bzl", "pkg_install")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files", "strip_prefix")
 
 package(default_visibility = ["//visibility:private"])
+
+runtime_module(
+    name = "module",
+    components = [":libstatic_transform_component.so"],
+    files = {
+        "runtime/static_transform.dag": "dag/transform/static_transform.dag",
+        "runtime/static_transform.launch": "launch/transform/static_transform.launch",
+    },
+    module_name = "transform",
+    visibility = ["//visibility:public"],
+)
 
 PUBLIC_HDRS = [
     "buffer.h",

@@ -1,0 +1,7 @@
+module_config {
+  module_library: "lib/components/transform/libstatic_transform_component.so"
+  components {
+    class_name: "StaticTransformComponent"
+    config { name: "static_transform" }
+  }
+}
