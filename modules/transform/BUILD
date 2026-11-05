@@ -128,6 +128,10 @@ cc_library(
         "@@//modules/localization:__pkg__",
         "@@//modules/ndt_localization:__pkg__",
         "@@//modules/perception/onboard/transform_wrapper:__pkg__",
+        "@@wheelos_hmi+//modules/dreamview/backend/point_cloud:__pkg__",
+        "@@wheelos_localization+//modules/localization:__pkg__",
+        "@@wheelos_localization+//modules/ndt_localization:__pkg__",
+        "@@wheelos_perception+//modules/perception/onboard/transform_wrapper:__pkg__",
     ],
     deps = [
         ":buffer",
@@ -187,6 +191,8 @@ cc_library(
         "@@//modules/dreamview/backend/point_cloud:__pkg__",
         "@@//modules/perception/onboard/transform_wrapper:__pkg__",
         "@@//modules/tools/vehicle_calibration:__pkg__",
+        "@@wheelos_hmi+//modules/dreamview/backend/point_cloud:__pkg__",
+        "@@wheelos_perception+//modules/perception/onboard/transform_wrapper:__pkg__",
     ],
     deps = [
         "@com_github_jbeder_yaml_cpp//:yaml-cpp",
