@@ -132,6 +132,7 @@ cc_library(
         "@@wheelos_localization+//modules/localization:__pkg__",
         "@@wheelos_localization+//modules/ndt_localization:__pkg__",
         "@@wheelos_perception+//modules/perception/onboard/transform_wrapper:__pkg__",
+        "@@hardware.lidar+//fusion:__pkg__",
     ],
     deps = [
         ":buffer",
